@@ -1,5 +1,5 @@
 :root {
-  --primary-color: rgb(27, 27, 159);
+  --primary-color: rgb(7, 218, 246);
   --secondary-primary: #0d0deb3a;
   --primary-dark: #2d86ce;
   --secondary-color: #ffd700;
@@ -277,7 +277,7 @@ body.dark-mode {
 }
 /* Hero */
 .hero {
-  background-color: rgb(32, 32, 164);
+  background-color: rgb(46, 230, 251);
   padding: 5rem 2rem;
   text-align: center;
   color: var(--primary-color);
@@ -435,7 +435,7 @@ body.dark-mode .testimonial-card h4 {
   color: var(--secondary-color);
 }
 .auto-hero {
-  background: var(--secondary-primary);
+  
   color: var(--primary-color);
   padding: 4rem 2rem;
   text-align: center;
@@ -505,7 +505,7 @@ body.dark-mode .premium-factors {
   color: #eee;
 }
 .health-hero {
-  background: #e0f7fa;
+  
   color: var(--primary-color);
   padding: 4rem 2rem;
   text-align: center;
@@ -534,7 +534,7 @@ body.dark-mode .quote-form select {
   border: 1px solid #444;
 }
 .policies-hero {
-  background: #e6f0ff;
+  
   padding: 4rem 2rem;
   text-align: center;
   color: var(--primary-color);
@@ -562,7 +562,7 @@ body.dark-mode .quote-form select {
   border: 1px solid #444;
 }
 .contact-hero {
-  background: #eef6ff;
+  
   padding: 4rem 2rem;
   text-align: center;
 }

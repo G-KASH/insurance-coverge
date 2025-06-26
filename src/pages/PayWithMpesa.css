@@ -1,0 +1,49 @@
+.mpesa-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 2rem;
+  background: #f0f4f8;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+.mpesa-container h2 {
+  text-align: center;
+  color: #222;
+  margin-bottom: 1.5rem;
+}
+
+.mpesa-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 1rem;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.mpesa-button {
+  width: 100%;
+  padding: 12px;
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+
+.mpesa-error {
+  color: #d9534f;
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+
+.mpesa-success {
+  color: #28a745;
+  margin-bottom: 1rem;
+  font-weight: bold;
+}

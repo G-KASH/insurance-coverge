@@ -13,7 +13,7 @@ const HomePage = () => {
     <div className="home">
       {/* Hero Section */}
       <section className="hero" style={{
-        backgroundImage: `url('/images/insurance-hero.jpg')`,
+        backgroundImage: `url('/images/pexels-mikhail-nilov-7735630.jpg')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}>
@@ -29,15 +29,15 @@ const HomePage = () => {
         <h2 data-aos="fade-up">Our Insurance Services</h2>
         <div className="service-cards">
           <div className="card" data-aos="fade-up">
-            <img src="/images/auto.jpg" alt="Auto Insurance" />
+            <img src="/images/pexels-artyom-kulakov-1190754-2265634.jpg" alt="Auto Insurance" />
             <h3>Auto Insurance</h3>
           </div>
           <div className="card" data-aos="fade-up" data-aos-delay="100">
-            <img src="/images/health.jpg" alt="Health Insurance" />
+            <img src="/images/pexels-leeloothefirst-7163948.jpg" alt="Health Insurance" />
             <h3>Health Insurance</h3>
           </div>
           <div className="card" data-aos="fade-up" data-aos-delay="200">
-            <img src="/images/life.jpg" alt="Life Insurance" />
+            <img src="/images/pexels-brett-sayles-4734933.jpg" alt="Life Insurance" />
             <h3>Life Coverage</h3>
           </div>
         </div>
@@ -48,17 +48,17 @@ const HomePage = () => {
         <h2 data-aos="fade-up">What Our Clients Say</h2>
         <div className="testimonial-cards">
           <div className="testimonial" data-aos="flip-left">
-            <img src="/images/public/images/pexels-leeloothefirst-7163948.jpg" alt="Client 1" />
+            <img src="/images/pexels-leeloothefirst-7163948.jpg" alt="Client 1" />
             <p>"SecureLife helped me find the best auto plan at a great price!"</p>
             <h4>– Alice, Nairobi</h4>
           </div>
           <div className="testimonial" data-aos="flip-left" data-aos-delay="150">
-            <img src="/images/client2.jpg" alt="Client 2" />
+            <img src="/images/pexels-leeloothefirst-7163948.jpg" alt="Client 2" />
             <p>"Their health cover gave my family peace of mind."</p>
             <h4>– Brian, Kisumu</h4>
           </div>
           <div className="testimonial" data-aos="flip-left" data-aos-delay="300">
-            <img src="/images/client3.jpg" alt="Client 3" />
+            <img src="/images/pexels-leeloothefirst-7163948.jpg" alt="Client 3" />
             <p>"Quick claims, friendly service, highly recommend!"</p>
             <h4>– Mary, Mombasa</h4>
           </div>

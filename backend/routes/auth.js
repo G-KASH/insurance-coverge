@@ -1,71 +1,72 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
-const bcrypt = require('bcryptjs');
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+const User = require('../models/User');
 
-// POST /forgot-password// POST /api/auth/forgot-password
-router.post('/forgot-password', async (req, res) => {
-  const { email } = req.body;
-  const user = await User.findOne({ email });
-  if (!user) return res.status(400).json({ message: 'User not found' });
-
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '15m' });
-
-  const resetLink = `http://localhost:5173/reset-password/${token}`; // adjust for production
-
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.EMAIL_USER, // e.g. yourapp@gmail.com
-      pass: process.env.EMAIL_PASS, // app-specific password
-    },
-  });
-
-  const mailOptions = {
-    from: process.env.EMAIL_USER,
-    to: user.email,
-    subject: 'Password Reset Request',
-    html: `<p>Click to reset your password: <a href="${resetLink}">${resetLink}</a></p>`,
-  };
-
+// 📌 REGISTER
+router.post('/register', async (req, res) => {
+  const { name, email, password } = req.body;
   try {
-    await transporter.sendMail(mailOptions);
-    res.json({ message: 'Reset link sent!' });
+    let user = await User.findOne({ email });
+    if (user)
+      return res.status(400).json({ message: 'User already exists' });
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    user = new User({ name, email, password: hashedPassword });
+    await user.save();
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: '1h',
+    });
+
+    res.status(201).json({ token });
   } catch (err) {
-    res.status(500).json({ message: 'Email failed to send' });
+    console.error('Register error:', err);
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
+// 🔐 LOGIN
+router.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user)
+      return res.status(400).json({ message: 'Invalid email or password' });
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch)
+      return res.status(400).json({ message: 'Invalid email or password' });
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: '1h',
+    });
+
+    res.status(200).json({ token });
+  } catch (err) {
+    console.error('Login error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// 🧠 FORGOT PASSWORD (with DB token method)
 router.post('/forgot-password', async (req, res) => {
   const { email } = req.body;
   try {
     const user = await User.findOne({ email });
-    if (!user) return res.status(404).json({ message: 'User not found' });
+    if (!user)
+      return res.status(404).json({ message: 'User not found' });
 
     const token = crypto.randomBytes(20).toString('hex');
     user.resetToken = token;
     user.resetTokenExpiry = Date.now() + 3600000; // 1 hour
     await user.save();
 
-    const resetLink = `http://localhost:5173/reset-password/${token}`;
-
-    // Send email
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
+    const resetLink = `http://localhost:5173/reset-password/${token}`; // change for prod
 
     const mailOptions = {
       to: user.email,
@@ -74,15 +75,23 @@ router.post('/forgot-password', async (req, res) => {
       html: `<p>Click <a href="${resetLink}">here</a> to reset your password.</p>`,
     };
 
-    transporter.sendMail(mailOptions);
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
 
+    await transporter.sendMail(mailOptions);
     res.json({ message: 'Reset link sent to email' });
   } catch (err) {
+    console.error('Forgot password error:', err);
     res.status(500).json({ message: 'Server error' });
   }
 });
 
-// POST /reset-password/:token
+// 🔐 RESET PASSWORD via TOKEN stored in DB
 router.post('/reset-password/:token', async (req, res) => {
   const { password } = req.body;
   try {
@@ -91,7 +100,8 @@ router.post('/reset-password/:token', async (req, res) => {
       resetTokenExpiry: { $gt: Date.now() },
     });
 
-    if (!user) return res.status(400).json({ message: 'Invalid or expired token' });
+    if (!user)
+      return res.status(400).json({ message: 'Invalid or expired token' });
 
     user.password = await bcrypt.hash(password, 10);
     user.resetToken = undefined;
@@ -100,19 +110,21 @@ router.post('/reset-password/:token', async (req, res) => {
 
     res.json({ message: 'Password reset successful' });
   } catch (err) {
+    console.error('Reset password error:', err);
     res.status(500).json({ message: 'Server error' });
   }
 });
 
-// POST /api/auth/reset-password/:token
-router.post('/reset-password/:token', async (req, res) => {
+// ✅ OPTIONAL: RESET PASSWORD via JWT Token (alternative)
+router.post('/reset-jwt/:token', async (req, res) => {
   const { token } = req.params;
   const { password } = req.body;
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.id);
-    if (!user) return res.status(404).json({ message: 'User not found' });
+    if (!user)
+      return res.status(404).json({ message: 'User not found' });
 
     const hashedPassword = await bcrypt.hash(password, 10);
     user.password = hashedPassword;
@@ -123,6 +135,5 @@ router.post('/reset-password/:token', async (req, res) => {
     res.status(400).json({ message: 'Invalid or expired token' });
   }
 });
-
 
 module.exports = router;
