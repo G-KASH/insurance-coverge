@@ -1,49 +1,54 @@
+// server.js
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const morgan = require('morgan');
+
 const authRoutes = require('./routes/auth');
-const mpesaRoutes = require('./routes/mpesa');
+const mpesaRoutes = require('./routes/mpesa'); // optional
 
 dotenv.config();
 
 const app = express();
 
-// ✅ CORS configuration - must come before routes
+// ✅ CORS configuration
+const allowedOrigins = [
+  'http://localhost:3000',            // React dev server
+  'https://securelife.vercel.app'     // your deployed frontend
+];
+
 app.use(cors({
-  origin: ['http://localhost:3000', 'https://your-frontend.vercel.app'], // replace with your actual deployed frontend
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
 }));
 
-// ✅ Logging (optional)
-app.use((req, res, next) => {
-  console.log('📥 Incoming request from:', req.headers.origin);
-  next();
-});
-
-// ✅ Body parser
+// ✅ Middleware
 app.use(express.json());
+app.use(morgan('dev'));
+
+// ✅ Health route (helps avoid 404 confusion)
+app.get('/', (req, res) => {
+  res.send('✅ Insurance API is running!');
+});
 
 // ✅ Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/mpesa', mpesaRoutes);
+app.use('/api/mpesa', mpesaRoutes); // optional
 
-// ✅ Connect to DB and start server
+// ✅ MongoDB connection
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
-    const { MPESA_CONSUMER_KEY, MPESA_CONSUMER_SECRET, MPESA_SHORTCODE, MPESA_PASSKEY, MPESA_CALLBACK_URL } = process.env;
-
-    if (!MPESA_CONSUMER_KEY || !MPESA_CONSUMER_SECRET || !MPESA_SHORTCODE || !MPESA_PASSKEY || !MPESA_CALLBACK_URL) {
-      console.error('❌ Missing M-Pesa environment variables. Please check .env or Render config.');
-    } else {
-      console.log('✅ M-Pesa environment variables loaded.');
-    }
-
     console.log('✅ MongoDB connected');
-    app.listen(5000, () => console.log('🚀 Server running on port 5000'));
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
   })
-  .catch(err => {
-    console.error('❌ MongoDB connection error:', err);
+  .catch((err) => {
+    console.error('❌ MongoDB connection error:', err.message);
   });

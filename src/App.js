@@ -13,7 +13,7 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import PayWithMpesa from './pages/PayWithMpesa';
 import PrivateRoute from './components/PrivateRoute';
-
+import DashboardPage from './pages/DashboardPage';
 import './styles/VideoHeader.css'; // Adjust path based on your structure
 
 const AppContent = () => {
@@ -35,6 +35,7 @@ const AppContent = () => {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+        
 
         {/* Protected Routes */}
         <Route path="/" element={<PrivateRoute><HomePage /></PrivateRoute>} />
@@ -43,6 +44,7 @@ const AppContent = () => {
         <Route path="/policies" element={<PrivateRoute><PoliciesPage /></PrivateRoute>} />
         <Route path="/contact" element={<PrivateRoute><ContactPage /></PrivateRoute>} />
         <Route path="/pay" element={<PrivateRoute><PayWithMpesa /></PrivateRoute>} />
+        <Route path="/dashboard" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
       </Routes>
 
       {!shouldHide && isAuthenticated && <Footer />}

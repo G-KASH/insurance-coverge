@@ -34,25 +34,30 @@ const Navbar = () => {
           <Link to="/">SecureLife</Link>
         </h1>
 
-        <nav className={`nav-links ${isMenuOpen ? 'open' : ''}`}>
-          <Link to="/" onClick={() => setIsMenuOpen(false)}>Home</Link>
-          <Link to="/auto" onClick={() => setIsMenuOpen(false)}>Auto</Link>
-          <Link to="/health" onClick={() => setIsMenuOpen(false)}>Health</Link>
-          <Link to="/policies" onClick={() => setIsMenuOpen(false)}>Policies</Link>
-          <Link to="/contact" onClick={() => setIsMenuOpen(false)}>Contact</Link>
-          <Link to="/pay" onClick={() => setIsMenuOpen(false)}><button>Make Payment</button></Link>
+      <nav className={`nav-links ${isMenuOpen ? 'open' : ''}`}>
+  <Link to="/" onClick={() => setIsMenuOpen(false)}>Home</Link>
+  <Link to="/auto" onClick={() => setIsMenuOpen(false)}>Auto</Link>
+  <Link to="/health" onClick={() => setIsMenuOpen(false)}>Health</Link>
+  <Link to="/policies" onClick={() => setIsMenuOpen(false)}>Policies</Link>
+  <Link to="/contact" onClick={() => setIsMenuOpen(false)}>Contact</Link>
+  <Link to="/pay" onClick={() => setIsMenuOpen(false)}><button>Make Payment</button></Link>
 
-          {!isLoggedIn ? (
-            <>
-              <Link to="/login" onClick={() => setIsMenuOpen(false)}>Login</Link>
-              <Link to="/register" onClick={() => setIsMenuOpen(false)}>Register</Link>
-            </>
-          ) : (
-            <>
-              <button onClick={handleLogout}>Logout</button>
-            </>
-          )}
-        </nav>
+  {isLoggedIn && (
+    <Link to="/dashboard" onClick={() => setIsMenuOpen(false)}>Dashboard</Link>
+  )}
+
+  {!isLoggedIn ? (
+    <>
+      <Link to="/login" onClick={() => setIsMenuOpen(false)}>Login</Link>
+      <Link to="/register" onClick={() => setIsMenuOpen(false)}>Register</Link>
+    </>
+  ) : (
+    <>
+      <button onClick={handleLogout}>Logout</button>
+    </>
+  )}
+</nav>
+
 
         <div className="nav-icons">
           <button onClick={() => setIsDarkMode(!isDarkMode)} className="dark-toggle">

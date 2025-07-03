@@ -49,7 +49,7 @@ function PayWithMpesa() {
     <div
       className="mpesa-background"
       style={{
-        backgroundImage: "url('/images/mpesa-bg.jpg')",
+        backgroundImage: "url('/images/pexels-pixabay-163056.jpg')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         minHeight: "100vh",

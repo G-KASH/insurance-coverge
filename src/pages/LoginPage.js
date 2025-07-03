@@ -10,14 +10,12 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
 
   const BASE_URL =
-     process.env.NODE_ENV === 'development'
+    process.env.NODE_ENV === 'development'
       ? 'http://localhost:5000'
       : 'https://insurance-backend.onrender.com';
 
   useEffect(() => {
-    if (localStorage.getItem('token')) {
-      navigate('/');
-    }
+    if (localStorage.getItem('token')) navigate('/');
   }, [navigate]);
 
   const handleLogin = async (e) => {
@@ -33,10 +31,12 @@ const LoginPage = () => {
         body: JSON.stringify({ email, password }),
       });
 
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || 'Login failed');
+      }
+
       const data = await res.json();
-
-      if (!res.ok) throw new Error(data.message || 'Login failed');
-
       localStorage.setItem('token', data.token);
       setSuccess('Login successful! Redirecting...');
       setTimeout(() => navigate('/'), 1500);
@@ -66,33 +66,45 @@ const LoginPage = () => {
         alignItems: 'center',
         justifyContent: 'center',
         backdropFilter: 'blur(0px)',
-      
         padding: '20px',
       }}>
-        <form onSubmit={handleLogin} style={{
-          background: '#fff',
-          padding: '30px',
-          borderRadius: '10px',
-          width: '100%',
-          maxWidth: '400px',
-          boxShadow: '0 0 10px rgba(0,0,0,0.3)'
-        }}>
+        <form onSubmit={handleLogin} style={formStyle}>
           <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Login to SecureLife</h2>
-          <input type="email" placeholder="Email" value={email} required
-            onChange={(e) => setEmail(e.target.value)} style={inputStyle} />
-          <input type="password" placeholder="Password" value={password} required
-            onChange={(e) => setPassword(e.target.value)} style={inputStyle} />
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            required
+            onChange={(e) => setEmail(e.target.value)}
+            style={inputStyle}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            required
+            onChange={(e) => setPassword(e.target.value)}
+            style={inputStyle}
+          />
           <button type="submit" disabled={loading} style={buttonStyle}>
             {loading ? 'Logging in...' : 'Login'}
           </button>
           {error && <p style={errorStyle}>{error}</p>}
           {success && <p style={successStyle}>{success}</p>}
           <p><a href="/register">Don't have an account? Register</a></p>
-          <p><a href="/forgot-password">Forgot password?</a></p>
         </form>
       </div>
     </div>
   );
+};
+
+const formStyle = {
+  background: '#fff',
+  padding: '30px',
+  borderRadius: '10px',
+  width: '100%',
+  maxWidth: '400px',
+  boxShadow: '0 0 10px rgba(0,0,0,0.3)'
 };
 
 const inputStyle = {

@@ -48,7 +48,12 @@
   font-size: 0.9rem;
 }
 
-
+.form-container {
+  min-height: 100vh;
+  background-image: url('/images/pexels-mikhail-nilov-7735630.jpg');
+  background-size: cover;
+  background-position: center;
+}
 
 .register-form {
   background-color: rgba(255, 255, 255, 0.85);

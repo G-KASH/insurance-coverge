@@ -1,12 +1,12 @@
 :root {
-  --primary-color: rgb(7, 218, 246);
+  --primary-color: black;
   --secondary-primary: #0d0deb3a;
   --primary-dark: #2d86ce;
-  --secondary-color: #ffd700;
-  --accent-color: #e63946;
-  --light-color: #f8f9fa;
+  --secondary-color: white;
+  --accent-color:white;
+  --light-color: black;
   --dark-color: #212529;
-  --gray-color: #6c757d;
+  --gray-color: white;
 }
 
 body {
@@ -20,7 +20,7 @@ body {
 
 .dark-mode {
   background-color: #121212;
-  color: #e0e0e0;
+  color:black;
 }
 
 .container {
@@ -31,7 +31,7 @@ body {
 
 /* Navbar Styles */
 .navbar {
-  background: var(--primary-color);
+  background: black;
   color: white;
   padding: 1rem 2rem;
   position: sticky;
@@ -182,7 +182,7 @@ body.dark-mode .footer-col ul li a:hover {
 }
 
 .service-card {
-  background: white;
+  background: black;
   padding: 1.5rem;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
