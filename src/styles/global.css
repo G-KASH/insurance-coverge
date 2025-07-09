@@ -1,13 +1,16 @@
+
 :root {
+  /* Light mode colors (default) */
   --primary-color: black;
-  --secondary-primary: #0d0deb3a;
-  --primary-dark: #2d86ce;
+  --secondary-primary: rgba(0, 0, 0, 0.05);
+  --primary-dark: black;
   --secondary-color: white;
-  --accent-color:white;
-  --light-color: black;
-  --dark-color: #212529;
-  --gray-color: white;
+  --accent-color: black;
+  --light-color: white;
+  --dark-color: black;
+  --gray-color: gray;
 }
+
 
 body {
   margin: 0;
