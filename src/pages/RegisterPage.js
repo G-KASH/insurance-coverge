@@ -11,8 +11,7 @@ const RegisterPage = () => {
   const BASE_URL =
     process.env.NODE_ENV === 'development'
       ? 'http://localhost:5000'
-      : 'https://secure-life-backend.onrender.com/';
-
+      : 'https://secure-life-backend.onrender.com';
   useEffect(() => {
     if (localStorage.getItem('token')) navigate('/');
   }, [navigate]);
